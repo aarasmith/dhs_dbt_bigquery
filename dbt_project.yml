@@ -35,4 +35,11 @@ models:
   dhs_dbt:
     # Config indicated by + and applies to all files under models/example/
     example:
+      schema: agg
+      +materialized: view
+    enrich:
+      schema: enrich
+      +materialized: view
+    stage:
+      schema: stage
       +materialized: view
