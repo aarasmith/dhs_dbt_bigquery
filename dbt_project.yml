@@ -43,3 +43,6 @@ models:
     stage:
       schema: stage
       +materialized: view
+    agg:
+      schema: agg
+      +materialized: view
