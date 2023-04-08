@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: my_source
+    schema: dhs_stage
+    tables:
+      - name: main_table
+  - name: raw
+    schema: dhs_raw
+    tables:
+      - name: svac
+      - name: ucdp_actor
+      - name: ged
+      - name: ns_girl_cs_2010_2020
+      - name: gov_girl_cs_2010_2020
+      - name: cluster_years
+      - name: ns_roos_1990_2011
