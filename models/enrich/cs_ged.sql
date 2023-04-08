@@ -1,6 +1,9 @@
 {{
   config(
-    materialized = "table"
+    materialized = "table",
+    indexes=[
+        {'columns': ['id']}
+    ]
   )
 }}
 
@@ -32,7 +35,7 @@ cs_non_state as (
 
 ged as (
     select
-        relid,
+        id,
         year,
         side_a_new_id,
         side_b_new_id,
@@ -47,7 +50,7 @@ ged as (
 
 ged_cs_2010_2020 as (
     select
-        ged.relid,
+        ged.id,
         coalesce(cs_state.cs, 0) as state_cs,
         coalesce(cs_non_state.cs, 0) as ns_cs
     from
@@ -65,18 +68,18 @@ ged_cs_2010_2020 as (
 
 ged_cs as (
     select
-        ged_new.relid,
+        ged_new.id,
         coalesce(ged_new.state_cs, 0) as state_cs,
         coalesce(ged_new.ns_cs, ged_old.cs, 0) as ns_cs
     from
         ged_cs_2010_2020 ged_new
         left join {{ ref('ns_cs_ged_1990_2011') }} ged_old
-            using (relid)
+            using (id)
 
 )
 
 select
-    relid,
+    id,
     state_cs,
     ns_cs,
     --both

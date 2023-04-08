@@ -1,20 +1,23 @@
 {{
   config(
-    materialized = "table"
+    materialized = "table",
+    indexes=[
+        {'columns': ['id']}
+    ]
   )
 }}
 
 with 
 ged as (
     select
-        relid,
+        id,
         type_of_violence as tov,
         best
     from {{ source('raw', 'ged') }}
 )
 
 select
-    relid,
+    id,
     --tov as type_of_violence,
     best,
     case

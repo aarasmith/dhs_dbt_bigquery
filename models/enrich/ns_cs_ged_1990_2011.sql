@@ -1,7 +1,7 @@
 
 
 select
-    ged.relid,
+    ged.id,
     coalesce(cs.cs, 0) as cs
 from
     {{ source('raw', 'ged') }} ged

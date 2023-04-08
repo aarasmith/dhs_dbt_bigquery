@@ -1,6 +1,9 @@
 {{
   config(
-    materialized = "table"
+    materialized = "table",
+    indexes=[
+        {'columns': ['cid', 'year', 'dist']}
+    ]
   )
 }}
 
@@ -19,7 +22,7 @@ select
     cid,
     year,
     dist,
-    count(relid) as n_events,
+    count(id) as n_events,
     {% for column in columns %}
     sum({{column}}) as {{column}},
     {% endfor %}
@@ -28,7 +31,7 @@ select
     sum(state_best) as state_intensity,
     sum(ns_best) as ns_intensity
 from {{ ref('ged_joined') }}
-where relid is not null
+where id is not null
 group by
     cid,
     year,

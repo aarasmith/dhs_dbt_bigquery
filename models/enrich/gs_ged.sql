@@ -1,6 +1,9 @@
 {{
   config(
-    materialized = "table"
+    materialized = "table",
+    indexes=[
+        {'columns': ['id']}
+    ]
   )
 }}
 
@@ -34,7 +37,7 @@ gs_non_state as (
 
 ged as (
     select
-        relid,
+        id,
         year,
         side_a_new_id,
         side_b_new_id,
@@ -49,7 +52,7 @@ ged as (
 
 ged_gs as (
     select
-        ged.relid,
+        ged.id,
         coalesce(gs_state.gs, 0) as state_gs,
         coalesce(gs_non_state.gs, 0) as ns_gs
     from
@@ -66,7 +69,7 @@ ged_gs as (
 )
 
 select
-    relid,
+    id,
     state_gs,
     ns_gs,
     --both

@@ -1,6 +1,9 @@
 {{
   config(
-    materialized = "table"
+    materialized = "table",
+    indexes=[
+        {'columns': ['id']}
+    ]
   )
 }}
 
@@ -14,7 +17,7 @@ sv_non_state as (
 
 ged as (
     select
-        relid,
+        id,
         year,
         side_a_new_id,
         side_b_new_id,
@@ -25,7 +28,7 @@ ged as (
 
 ged_sv as (
     select
-        ged.relid,
+        ged.id,
         coalesce(sv_state.adult_prev_minor, 0) as state_adult_prev_minor,
         coalesce(sv_state.adult_prev_major, 0) as state_adult_prev_major,
         coalesce(sv_state.child_prev, 0) as state_child_prev,
@@ -48,7 +51,7 @@ ged_sv as (
 )
 
 select
-    relid,
+    id,
     state_adult_prev_minor,
     state_adult_prev_major,
     state_child_prev,

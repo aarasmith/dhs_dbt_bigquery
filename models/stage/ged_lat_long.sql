@@ -1,5 +1,5 @@
 select
-    relid,
+    id,
     year,
     latitude,
     longitude

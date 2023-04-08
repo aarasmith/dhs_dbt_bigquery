@@ -3,4 +3,4 @@ select distinct on (cid)
     iso2c,
     long,
     lat
-from {{ ref('cluster_years_stage') }}
+from {{ ref('stg_cluster_years') }}

@@ -46,3 +46,6 @@ models:
     agg:
       schema: agg
       +materialized: view
+    curate:
+      schema: curate
+      +materialized: view
