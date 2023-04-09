@@ -1,13 +1,4 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['cid', 'year']}
-    ],
-    pre_hook = ["set work_mem = '256MB'"],
-    post_hook = ["reset work_mem"]
-  )
-}}
+
 
 {% set columns = ['id_year', 'id_', 'year', 'CEY', 'circ1', 'circ2', 'ynum', 'v010',
        'v012', 'v025', 'v101', 'v104', 'v107', 'v130', 'v133', 'v149', 'v212',
