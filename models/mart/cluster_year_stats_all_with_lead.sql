@@ -41,9 +41,21 @@
 
 {% set columns_ny = ['intensity_25km_ny', 'intensity_50km_ny']%}
 
+with
+cluster_years as(
+    select
+        cid,
+        year,
+        survey_id,
+        cluster
+    from {{ ref('stg_cluster_years') }}
+)
+
+
 select
-    cid,
-    year,
+    cy.survey_id,
+    cy.cluster,
+    cy.year,
     {% for column in columns %}
     coalesce(cs.{{column}}, 0) as {{column}},
     {% endfor %}
@@ -51,6 +63,8 @@ select
     coalesce(csl.{{column}}, 0) as {{column}},
     {% endfor %}
     coalesce(csl.intensity_100km_ny, 0) as intensity_100km_ny
-from {{ ref('cluster_year_stats_all') }} cs
-full outer join {{ ref('cluster_year_stats_lead_all') }} csl
+from cluster_years cy
+left join {{ ref('cluster_year_stats_all') }} cs
+    using(cid, year)
+left join {{ ref('cluster_year_stats_lead_all') }} csl
     using(cid, year)

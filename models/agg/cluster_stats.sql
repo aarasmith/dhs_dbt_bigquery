@@ -4,7 +4,7 @@
     indexes=[
         {'columns': ['cid', 'year', 'dist'], 'unique': True}
     ],
-    pre_hook = ["set local work_mem = '128MB'"],
+    pre_hook = ["set local work_mem = '40MB'"],
     post_hook = ["reset work_mem"]
   )
 }}
