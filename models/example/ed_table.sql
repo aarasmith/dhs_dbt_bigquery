@@ -1,4 +1,13 @@
-{{ config(materialized='view') }}
+{{
+  config(
+    materialized = "table",
+    indexes=[
+        {'columns': ['cid', 'year']}
+    ],
+    pre_hook = ["set work_mem = '256MB'"],
+    post_hook = ["reset work_mem"]
+  )
+}}
 
 {% set columns = ['id_year', 'id_', 'year', 'CEY', 'circ1', 'circ2', 'ynum', 'v010',
        'v012', 'v025', 'v101', 'v104', 'v107', 'v130', 'v133', 'v149', 'v212',
@@ -12,14 +21,11 @@
        'no_education', 'dropout1', 'dropout2', 'unknown_location',
        'never_mover', 'before_move', 'sex_num', 'SurveyId'] %}
 
-with ed_table as (
-    select 
-        {% for column in columns %}
-        "{{column}}", --as {{column|lower}},
-        {% endfor %}
-        concat("SurveyId", "CLUSTER") as cid
-    from {{ source('my_source', 'main_table') }}
-    where year > 1989
-)
 
-select * from ed_table
+select 
+    {% for column in columns %}
+    "{{column}}", --as {{column|lower}},
+    {% endfor %}
+    concat("SurveyId", "CLUSTER") as cid
+from {{ source('my_source', 'main_table') }}
+where year > 1989

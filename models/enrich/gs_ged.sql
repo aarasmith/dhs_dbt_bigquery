@@ -1,38 +1,23 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['id']}
-    ]
-  )
-}}
+
 
 with gs_state as (
     select
-        "ISO3C" as iso3c,
-        side_a_new_id as actorid,
+        iso3c,
+        actorid,
         year,
-        case
-            when "Girlsoldiers" = 'yes'
-            then 1
-            else 0
-        end gs,
-        "Uncertain_girl" as uncertain_girl
-    from {{ source('raw', 'gov_girl_cs_2010_2020') }}
+        gs
+    from {{ ref('stg_gs_2010_2020') }}
+    where state = 1
 ),
 
 gs_non_state as (
     select
-        "ISO3C" as iso3c,
-        side_b_new_id as actorid,
+        iso3c,
+        actorid,
         year,
-        case
-            when "Girlsoldiers" = 'yes'
-            then 1
-            else 0
-        end gs,
-        "Uncertain_girl" as uncertain_girl
-    from {{ source('raw', 'ns_girl_cs_2010_2020') }}
+        gs
+    from {{ ref('stg_gs_2010_2020') }}
+    where state = 0
 ),
 
 ged as (
@@ -42,12 +27,8 @@ ged as (
         side_a_new_id,
         side_b_new_id,
         conflict_new_id,
-        ged_iso.iso3c
-    from {{ source('raw', 'ged') }} ged
-    left join
-        {{ ref('ged_iso') }} ged_iso
-        on ged.country = ged_iso.country
-    --where year > 2009
+        iso3c
+    from {{ ref('stg_ged') }}
 ),
 
 ged_gs as (

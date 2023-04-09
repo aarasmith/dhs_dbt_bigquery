@@ -1,11 +1,4 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['id']}
-    ]
-  )
-}}
+
 
 with 
 ged as (
@@ -13,7 +6,7 @@ ged as (
         id,
         type_of_violence as tov,
         best
-    from {{ source('raw', 'ged') }}
+    from {{ ref('stg_ged') }}
 )
 
 select

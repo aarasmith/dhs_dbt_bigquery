@@ -3,7 +3,9 @@
     materialized = "table",
     indexes=[
         {'columns': ['id', 'year', 'dist']}
-    ]
+    ],
+    pre_hook = ["set local work_mem = '40MB'"],
+    post_hook = ["reset work_mem"]
   )
 }}
 
@@ -14,7 +16,7 @@ ged_cluster as (
         cast (year as INTEGER) as year,
         cid,
         cast (dist as INTEGER) as dist
-    from {{ ref('ged_cluster') }}
+    from {{ ref('cluster_ged') }}
 ),
 
 ged_joined as (
@@ -29,7 +31,7 @@ ged_joined as (
         {{ ref('gs_ged') }} gs_ged
         using (id)
     left join
-        {{ ref('ged_conflict_type') }} ged_conflict_type
+        {{ ref('conflict_type_ged') }} ged_conflict_type
         using (id)
     left join
         {{ ref('cs_ged') }}

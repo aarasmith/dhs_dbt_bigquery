@@ -1,18 +1,13 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['id']}
-    ]
-  )
-}}
+
 
 with sv_state as (
-    select * from {{ ref('sv_state') }}
+    select * from {{ ref('stg_sv') }}
+    where state = 1
 ),
 
 sv_non_state as (
-    select * from {{ ref('sv_non_state') }}
+    select * from {{ ref('stg_sv') }}
+    where state = 0
 ),
 
 ged as (
@@ -23,7 +18,7 @@ ged as (
         side_b_new_id,
         conflict_new_id,
         country_id
-    from {{ source('raw', 'ged') }}
+    from {{ ref('stg_ged') }}
 ),
 
 ged_sv as (

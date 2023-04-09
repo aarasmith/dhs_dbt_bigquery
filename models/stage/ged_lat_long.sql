@@ -3,4 +3,4 @@ select
     year,
     latitude,
     longitude
-from {{ source('raw', 'ged') }}
+from {{ ref('stg_ged') }}

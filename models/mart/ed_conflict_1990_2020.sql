@@ -1,3 +1,6 @@
+
+
+
 {% set columns = ['state_adult_prev_minor_25km', 'state_adult_prev_major_25km',
 'state_child_prev_25km', 'ns_adult_prev_minor_25km',
 'ns_adult_prev_major_25km','ns_child_prev_25km',
@@ -37,24 +40,11 @@
 'only_state_cs_100km', 'only_ns_cs_100km', 'cs_100km', 'intensity_100km',
 'os_intensity_100km', 'state_intensity_100km', 'ns_intensity_100km'] %}
 
-with
-csa as (
-    select
-        *
-    from {{ ref('cluster_year_stats_all') }}
-),
-
-ed as (
-    select
-        *
-    from {{ ref('ed_table') }}
-)
-
 select
     {% for column in columns %}
     coalesce(csa.{{column}}, 0) as {{column}},
     {% endfor %}
     ed.*
-from ed
-left join csa
+from {{ ref('ed_table') }} ed
+left join {{ ref('cluster_year_stats_all') }} csa
     using (cid, year)

@@ -1,3 +1,7 @@
+
+
+
+
 {% set prefix_columns = ['state_adult_prev_minor',
        'state_adult_prev_major', 'state_child_prev', 'ns_adult_prev_minor',
        'ns_adult_prev_major', 'ns_child_prev', 'both_adult_prev_major',
@@ -13,8 +17,8 @@
     select
         cid,
         {% for column in prefix_columns %}
-        {{column}} as {{column}}_50km,
+        {{column}} as {{column}}_100km,
         {% endfor %}
         year
     from {{ ref('cluster_stats') }}
-    where dist = 50
+    where dist = 100

@@ -1,36 +1,23 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['id']}
-    ]
-  )
-}}
+
 
 with cs_state as (
     select
-        "ISO3C" as iso3c,
-        side_a_new_id as actorid,
+        iso3c,
+        actorid,
         year,
-        case
-            when "Check_CS_coding" = 'yes'
-            then 1
-            else 0
-        end cs
-    from {{ source('raw', 'gov_girl_cs_2010_2020') }}
+        cs
+    from {{ ref('stg_cs_2010_2020') }}
+    where state = 1
 ),
 
 cs_non_state as (
     select
-        "ISO3C" as iso3c,
-        side_b_new_id as actorid,
+        iso3c,
+        actorid,
         year,
-        case
-            when "Check_CS_coding" = 'yes'
-            then 1
-            else 0
-        end cs
-    from {{ source('raw', 'ns_girl_cs_2010_2020') }}
+        cs
+    from {{ ref('stg_cs_2010_2020') }}
+    where state = 0
 ),
 
 ged as (
@@ -40,12 +27,8 @@ ged as (
         side_a_new_id,
         side_b_new_id,
         conflict_new_id,
-        ged_iso.iso3c
-    from {{ source('raw', 'ged') }} ged
-    left join
-        {{ ref('ged_iso') }} as ged_iso
-        on ged.country = ged_iso.country
-    --where year > 2009
+        iso3c
+    from {{ ref('stg_ged') }} ged
 ),
 
 ged_cs_2010_2020 as (
@@ -66,6 +49,19 @@ ged_cs_2010_2020 as (
 
 ),
 
+ged_cs_1990_2011 as (
+    select
+        ged.id,
+        coalesce(cs.cs, 0) as cs
+    from
+        {{ ref('stg_ged') }} ged
+    left join
+        {{ ref('stg_cs_1990_2011') }} cs
+    on cs.sideb in (ged.side_a, ged.side_b)
+        and cs.year = ged.year
+        and cs.location = ged.country
+),
+
 ged_cs as (
     select
         ged_new.id,
@@ -73,7 +69,7 @@ ged_cs as (
         coalesce(ged_new.ns_cs, ged_old.cs, 0) as ns_cs
     from
         ged_cs_2010_2020 ged_new
-        left join {{ ref('ns_cs_ged_1990_2011') }} ged_old
+        left join ged_cs_1990_2011 ged_old
             using (id)
 
 )
