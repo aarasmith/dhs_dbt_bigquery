@@ -13,7 +13,7 @@ with svac as (
 ),
 
 actors as (
-    select "ActorId" as actorid, "Org" as org
+    select ActorId as actorid, Org as org
     from {{ source('raw', 'ucdp_actor') }}
 ),
 

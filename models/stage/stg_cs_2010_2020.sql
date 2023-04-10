@@ -3,11 +3,11 @@
 
 with cs_state as (
     select
-        "ISO3C" as iso3c,
+        ISO3C as iso3c,
         side_a_new_id as actorid,
         year,
         case
-            when "Check_CS_coding" = 'yes'
+            when Check_CS_coding = 'yes'
             then 1
             else 0
         end cs,
@@ -17,11 +17,11 @@ with cs_state as (
 
 cs_non_state as (
     select
-        "ISO3C" as iso3c,
+        ISO3C as iso3c,
         side_b_new_id as actorid,
         year,
         case
-            when "Check_CS_coding" = 'yes'
+            when Check_CS_coding = 'yes'
             then 1
             else 0
         end cs,

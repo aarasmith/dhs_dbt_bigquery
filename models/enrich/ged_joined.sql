@@ -1,13 +1,4 @@
-{{
-  config(
-    materialized = "table",
-    indexes=[
-        {'columns': ['id', 'year', 'dist']}
-    ],
-    pre_hook = ["set local work_mem = '40MB'"],
-    post_hook = ["reset work_mem"]
-  )
-}}
+
 
 with
 ged_cluster as (
