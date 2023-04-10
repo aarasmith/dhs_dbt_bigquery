@@ -37,6 +37,7 @@ models:
     example:
       schema: agg
       +materialized: view
+      +enabled: false
     enrich:
       schema: enrich
       +materialized: view
@@ -52,3 +53,7 @@ models:
     mart:
       schema: mart
       +materialized: view
+      ed_conflict_1990_2020:
+        +enabled: false
+      ed_conflict_lead_1990_2020:
+        +enabled: false
