@@ -64,14 +64,20 @@ ged_cs_1990_2011 as (
 
 ged_cs as (
     select
-        ged_new.id,
-        coalesce(ged_new.state_cs, 0) as state_cs,
-        coalesce(ged_new.ns_cs, ged_old.cs, 0) as ns_cs
-    from
-        ged_cs_2010_2020 ged_new
-        left join ged_cs_1990_2011 ged_old
-            using (id)
-
+        id,
+        max(state_cs) as state_cs,
+        max(ns_cs) as ns_cs
+    from (
+        select
+            ged_new.id,
+            coalesce(ged_new.state_cs, 0) as state_cs,
+            coalesce(ged_new.ns_cs, ged_old.cs, 0) as ns_cs
+        from
+            ged_cs_2010_2020 ged_new
+            left join ged_cs_1990_2011 ged_old
+                using (id)
+    )
+    group by id
 )
 
 select

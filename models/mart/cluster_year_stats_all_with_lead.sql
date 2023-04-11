@@ -47,6 +47,7 @@ cluster_years as(
         cid,
         year,
         survey_id,
+        region,
         cluster
     from {{ ref('stg_cluster_years') }}
 )
@@ -54,6 +55,7 @@ cluster_years as(
 
 select
     cy.survey_id,
+    cy.region,
     cy.cluster,
     cy.year,
     {% for column in columns %}

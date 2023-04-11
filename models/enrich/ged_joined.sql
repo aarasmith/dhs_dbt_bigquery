@@ -1,7 +1,7 @@
 
 
 with
-ged_cluster as (
+cluster_ged as (
     select
         cast (id as INTEGER) as id,
         cast (year as INTEGER) as year,
@@ -14,7 +14,7 @@ ged_joined as (
     select
         *
     from
-    ged_cluster
+    cluster_ged
     left join
         {{ ref('sv_ged') }} sv_ged
         using (id)

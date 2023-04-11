@@ -23,26 +23,36 @@ ged as (
 
 ged_sv as (
     select
-        ged.id,
-        coalesce(sv_state.adult_prev_minor, 0) as state_adult_prev_minor,
-        coalesce(sv_state.adult_prev_major, 0) as state_adult_prev_major,
-        coalesce(sv_state.child_prev, 0) as state_child_prev,
-        coalesce(sv_non_state.adult_prev_minor, 0) as ns_adult_prev_minor,
-        coalesce(sv_non_state.adult_prev_major, 0) as ns_adult_prev_major,
-        coalesce(sv_non_state.child_prev, 0) as ns_child_prev
-    from
-        ged
-        left join sv_state
-            on sv_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
-                and sv_state.year = ged.year
-                and sv_state.conflictid = ged.conflict_new_id
-                and ged.country_id in (sv_state.gwnoloc, sv_state.gwnoloc2)
-        left join sv_non_state
-            on sv_non_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
-                and sv_non_state.year = ged.year
-                and sv_non_state.conflictid = ged.conflict_new_id
-                and ged.country_id in (sv_non_state.gwnoloc, sv_non_state.gwnoloc2)
-
+        id,
+        max(state_adult_prev_minor) as state_adult_prev_minor,
+        max(state_adult_prev_major) as state_adult_prev_major,
+        max(state_child_prev) as state_child_prev,
+        max(ns_adult_prev_minor) as ns_adult_prev_minor,
+        max(ns_adult_prev_major) as ns_adult_prev_major,
+        max(ns_child_prev) as ns_child_prev
+    from (
+        select
+            ged.id,
+            coalesce(sv_state.adult_prev_minor, 0) as state_adult_prev_minor,
+            coalesce(sv_state.adult_prev_major, 0) as state_adult_prev_major,
+            coalesce(sv_state.child_prev, 0) as state_child_prev,
+            coalesce(sv_non_state.adult_prev_minor, 0) as ns_adult_prev_minor,
+            coalesce(sv_non_state.adult_prev_major, 0) as ns_adult_prev_major,
+            coalesce(sv_non_state.child_prev, 0) as ns_child_prev
+        from
+            ged
+            left join sv_state
+                on sv_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
+                    and sv_state.year = ged.year
+                    and sv_state.conflictid = ged.conflict_new_id
+                    and ged.country_id in (sv_state.gwnoloc, sv_state.gwnoloc2)
+            left join sv_non_state
+                on sv_non_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
+                    and sv_non_state.year = ged.year
+                    and sv_non_state.conflictid = ged.conflict_new_id
+                    and ged.country_id in (sv_non_state.gwnoloc, sv_non_state.gwnoloc2)
+    )
+    group by id
 )
 
 select

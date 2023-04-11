@@ -33,20 +33,26 @@ ged as (
 
 ged_gs as (
     select
-        ged.id,
-        coalesce(gs_state.gs, 0) as state_gs,
-        coalesce(gs_non_state.gs, 0) as ns_gs
-    from
-        ged
-        left join gs_state
-            on gs_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
-                and gs_state.year = ged.year
-                and ged.iso3c = gs_state.iso3c
-        left join gs_non_state
-            on gs_non_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
-                and gs_non_state.year = ged.year
-                and ged.iso3c = gs_non_state.iso3c
-
+        id,
+        max(state_gs) as state_gs,
+        max(ns_gs) as ns_gs
+    from (
+        select
+            ged.id,
+            coalesce(gs_state.gs, 0) as state_gs,
+            coalesce(gs_non_state.gs, 0) as ns_gs
+        from
+            ged
+            left join gs_state
+                on gs_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
+                    and gs_state.year = ged.year
+                    and ged.iso3c = gs_state.iso3c
+            left join gs_non_state
+                on gs_non_state.actorid in (ged.side_a_new_id, ged.side_b_new_id)
+                    and gs_non_state.year = ged.year
+                    and ged.iso3c = gs_non_state.iso3c
+    )
+    group by id
 )
 
 select

@@ -1,7 +1,7 @@
 
 
 select
-    CONCAT (SurveyId, CLUSTER) as cid,
+    CONCAT (SurveyId, CLUSTER, '-', v101) as cid,
     SurveyId as survey_id,
     iso2c,
     year,

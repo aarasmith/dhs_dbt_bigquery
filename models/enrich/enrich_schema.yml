@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: sv_ged
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+  
+  - name: gs_ged
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+  
+  - name: cs_ged
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: conflict_type_ged
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: best
+        tests:
+          - not_null
+
+  - name: cluster_ged
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cid
+            - id
+            - dist
+    columns:
+      - name: cid
+        tests:
+          - not_null
+
+  - name: ged_joined
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cid
+            - id
+            - dist
+    columns:
+      - name: cid
+        tests:
+          - not_null

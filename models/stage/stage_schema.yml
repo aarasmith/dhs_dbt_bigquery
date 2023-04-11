@@ -1,0 +1,125 @@
+version: 2
+
+models:
+  - name: stg_ged
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+  
+  - name: ged_lat_long
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+  
+  - name: stg_cluster_years
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cid
+            - year
+    columns:
+      - name: cid
+        description: Concatenation of survey_id and cluster
+        tests:
+          - not_null
+  
+  - name: unique_clusters
+    columns:
+      - name: cid
+        description: Concatenation of survey_id and cluster
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_sv
+    columns:
+      - name: actorid
+        tests:
+          - not_null
+
+  - name: ged_iso
+    columns:
+      - name: country
+        tests:
+          - unique
+          - not_null
+      - name: iso3c
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_cs_1990_2011
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - sideb
+            - year
+            - location
+    columns:
+      - name: sideb
+        description: ged sideb_new_id
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: location
+        description: ged country
+        tests:
+          - not_null
+      - name: cs
+        description: child soldiers
+        tests:
+          - not_null
+
+  - name: stg_cs_2010_2020
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - actorid
+            - year
+            - iso3c
+    columns:
+      - name: actorid
+        description: ged sideb_new_id or sidea_new_id
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: iso3c
+        description: iso3c code
+        tests:
+          - not_null
+      - name: cs
+        description: child soldiers
+        tests:
+          - not_null
+  
+  - name: stg_gs_2010_2020
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - actorid
+            - year
+            - iso3c
+    columns:
+      - name: actorid
+        description: ged sideb_new_id or sidea_new_id
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: iso3c
+        description: iso3c code
+        tests:
+          - not_null
+      - name: gs
+        description: girl soldiers
+        tests:
+          - not_null

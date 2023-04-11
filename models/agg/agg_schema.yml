@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: cluster_stats
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cid
+            - year
+            - dist
+    columns:
+      - name: cid
+        tests:
+          - not_null
