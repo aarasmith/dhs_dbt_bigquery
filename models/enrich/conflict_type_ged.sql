@@ -12,21 +12,21 @@ ged as (
 select
     id,
     --tov as type_of_violence,
-    best,
+    best as intensity,
     case
         when tov = 1
         then best
         else 0
-    end state_best,
+    end state_intensity,
     case
         when tov = 2
         then best
         else 0
-    end ns_best,
+    end ns_intensity,
     --one-sided violence
     case
         when tov = 3
         then best
         else 0
-    end os_best
+    end os_intensity
 from ged
