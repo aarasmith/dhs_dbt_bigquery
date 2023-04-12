@@ -25,7 +25,7 @@ def model(dbt, fal):
 
         cluster_ged = clusters_buffer.sjoin(ged, how="left")
         cluster_ged['dist'] = buffer_length / 1000
-        cluster_ged = pd.DataFrame(cluster_ged.drop(columns=['lat', 'long', 'geometry', 'index_right', 'latitude', 'longitude', 'iso2c']))
+        cluster_ged = pd.DataFrame(cluster_ged.drop(columns=['lat', 'long', 'geometry', 'index_right', 'latitude', 'longitude']))
         
         clusters_out.append(cluster_ged)
 

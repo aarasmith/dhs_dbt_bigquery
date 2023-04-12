@@ -8,6 +8,7 @@ cluster_ged as (
         cid,
         cast (dist as INTEGER) as dist
     from {{ ref('cluster_ged') }}
+    where cluster_iso2c = ged_iso2c
 ),
 
 ged_joined as (

@@ -28,7 +28,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: best
+      - name: intensity
         tests:
           - not_null
 
