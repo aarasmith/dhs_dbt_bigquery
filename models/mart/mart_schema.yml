@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: cluster_cumulative_conflict_25km
+    columns:
+      - name: grp
+        tests:
+          - not_null
+      - name: conflict_dummy_25km
+        tests:
+          - not_null
+      - name: cumulative_conflict_years_25km
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: '> 0'
+              config:
+                where: "conflict_dummy_25km = 1"
+          - dbt_utils.expression_is_true:
+              expression: '= 0'
+              config:
+                where: "conflict_dummy_25km = 0"
+
+  - name: cluster_cumulative_conflict_50km
+    columns:
+      - name: grp
+        tests:
+          - not_null
+      - name: conflict_dummy_50km
+        tests:
+          - not_null
+      - name: cumulative_conflict_years_50km
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: '> 0'
+              config:
+                where: "conflict_dummy_50km = 1"
+          - dbt_utils.expression_is_true:
+              expression: '= 0'
+              config:
+                where: "conflict_dummy_50km = 0"
+  
+  - name: cluster_cumulative_conflict_100km
+    columns:
+      - name: grp
+        tests:
+          - not_null
+      - name: conflict_dummy_100km
+        tests:
+          - not_null
+      - name: cumulative_conflict_years_100km
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: '> 0'
+              config:
+                where: "conflict_dummy_100km = 1"
+          - dbt_utils.expression_is_true:
+              expression: '= 0'
+              config:
+                where: "conflict_dummy_100km = 0"
+
+  - name: cluster_cumulative_conflict_all
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cid
+            - year
+    columns:
+      - name: cumulative_conflict_years_25km
+        tests:
+          - not_null
+      - name: cumulative_conflict_years_50km
+        tests:
+          - not_null
+      - name: cumulative_conflict_years_100km
+        tests:
+          - not_null
+    

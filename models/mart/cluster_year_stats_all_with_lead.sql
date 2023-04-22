@@ -20,6 +20,7 @@ select
     cy.region,
     cy.cluster,
     cy.year,
+    cid,
     {% for column in columns %}
     coalesce(cs.{{column}}_25km, 0) as {{column}}_25km,
     coalesce(cs.{{column}}_50km, 0) as {{column}}_50km,
