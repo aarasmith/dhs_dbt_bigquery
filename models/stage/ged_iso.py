@@ -2,7 +2,7 @@ import pandas as pd
 import country_converter as coco
 
 def model(dbt, fal):
-    ged = dbt.source('raw', 'ged')
+    ged = dbt.source('raw', 'ged2021')
     ged_countries = ged.country.unique()
     ged = pd.DataFrame(
         {"country": ged_countries,
